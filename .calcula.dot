@@ -1,0 +1,12 @@
+digraph "CFG for 'calcula' function" {
+	label="CFG for 'calcula' function";
+
+	Node0x202d7a95980 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870" fontname="Courier",label="{1:\l|  %2 = alloca i32, align 4\l  %3 = alloca i32, align 4\l  %4 = alloca i32, align 4\l  store i32 %0, ptr %3, align 4\l  %5 = load i32, ptr %3, align 4\l  %6 = call i32 @soma(i32 noundef %5, i32 noundef 3)\l  store i32 %6, ptr %4, align 4\l  %7 = load i32, ptr %4, align 4\l  %8 = srem i32 %7, 2\l  %9 = icmp eq i32 %8, 0\l  br i1 %9, label %10, label %13\l|{<s0>T|<s1>F}}"];
+	Node0x202d7a95980:s0 -> Node0x202d7a96340;
+	Node0x202d7a95980:s1 -> Node0x202d7a962e0;
+	Node0x202d7a96340 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#c32e3170" fontname="Courier",label="{10:\l|  %11 = load i32, ptr %4, align 4\l  %12 = call i32 @multiplica(i32 noundef %11, i32 noundef 4)\l  store i32 %12, ptr %2, align 4\l  br label %16\l}"];
+	Node0x202d7a96340 -> Node0x202d7a959e0;
+	Node0x202d7a962e0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#bb1b2c70" fontname="Courier",label="{13:\l|  %14 = load i32, ptr %4, align 4\l  %15 = call i32 @divide(i32 noundef %14, i32 noundef 2)\l  store i32 %15, ptr %2, align 4\l  br label %16\l}"];
+	Node0x202d7a962e0 -> Node0x202d7a959e0;
+	Node0x202d7a959e0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870" fontname="Courier",label="{16:\l|  %17 = load i32, ptr %2, align 4\l  ret i32 %17\l}"];
+}
