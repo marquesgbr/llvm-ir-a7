@@ -1,6 +1,6 @@
 # Respostas - Explorando Representações Intermediárias com LLVM IR
 
-## 2\. Código C e Geração de IR
+## 2. Código C e Geração de IR
 
 ### Como estão representadas as funções `soma`, `multiplica` e `calcula` em IR?
 
@@ -43,7 +43,7 @@ As chamadas de função usam a instrução `call`:
 
 O formato é: `%registrador_virtual = call tipo_retorno @nome_funcao(tipo arg1, tipo arg2, ...)`
 
-## 3\. Modificação do Código
+## 3. Modificação do Código
 
 ### Como o `if (temp % 2 == 0)` aparece no IR?
 
@@ -61,7 +61,7 @@ br i1 %9, label %10, label %13  ; branch condicional
 **Resposta:**
 O operador módulo `%` é representado pela instrução `srem` (signed remainder):
 
-É usado em operacoes\_mod.ll:
+É usado em operacoes_mod.ll:
 
 ``` llvm
 %8 = srem i32 %7, 2
@@ -73,14 +73,14 @@ O operador módulo `%` é representado pela instrução `srem` (signed remainder
 ### Quais são os blocos básicos criados pela nova lógica condicional?
 
 **Resposta:**
-A função `calcula` possui **4 blocos básicos**:
+A função `calcula` possui 4 blocos básicos:
 
 1. Bloco 1: Chama `soma`, calcula módulo e faz comparação
 2. Bloco 10: Executa quando número é par → chama `multiplica`
 3. Bloco 13: Executa quando número é ímpar → chama `divide`
 4. Bloco 16: Bloco de convergência → retorna resultado final
 
-## 4\. Otimização com `opt`
+## 4. Otimização com `opt`
 
 ### Que mudanças ocorreram na função `main` após a otimização?
 
@@ -121,7 +121,7 @@ define dso_local noundef i32 @main() local_unnamed_addr #1 {
 ### Alguma função foi *inlined* (inserida diretamente)? Como identificar?
 
 **Resposta:**
-Não, nenhuma função foi completamente inlined, pois as funções foram mantidas separadas (todas as definições `define` ainda existem) e o atributo **noinline** ainda está presente, impedindo inlining completo.
+Não, nenhuma função foi inlined, pois as funções foram mantidas separadas (todas as definições `define` ainda existem) e o atributo **noinline** ainda está presente, impedindo inlining completo.
 Se houvesse inlining, O código da função seria copiado para o local da chamada.
 
 ### Alguma variável intermediária foi eliminada? Por quê?
@@ -129,7 +129,7 @@ Se houvesse inlining, O código da função seria copiado para o local da chamad
 **Resposta:**
 Sim, algumas variáveis intermediárias foram eliminadas através de(o):
 
-**1\. Eliminação de allocation\-to\-register:**
+**1. Eliminação de allocation-to-register:**
 
 ``` llvm
 // Antes: operações de memória desnecessárias
@@ -145,7 +145,7 @@ store i32 %1, ptr %4, align 4
 %3 = add nsw i32 %1, %0
 ```
 
-**2\. Uso de PHI nodes:**
+**2. Uso de PHI nodes:**
 
 ``` llvm
 // Convergência otimizada com PHI
@@ -155,12 +155,12 @@ store i32 %1, ptr %4, align 4
 **O porquê disso acontecer:**
 O LLVM detectou que variáveis locais podiam ser mantidas em registradores em vez de memória, eliminando operações desnecessárias de store/load, ou seja, ocorreu uma conversão de allocation-to-register: de alocação na stack para uso direto de registradores virtuais
 
-## 5\. Visualizando o Grafo de Fluxo de Controle \(CFG\)
+## 5. Visualizando o Grafo de Fluxo de Controle (CFG)
 
 ### Quantos blocos básicos você consegue identificar na função `calcula`?
 
 **Resposta:**
-A função `calcula` possui 4 blocos básicos:
+4 blocos básicos:
 
 1. Bloco 1: Entrada, declarações, chamada `soma(valor, 3)`, cálculo módulo e comparação
 2. Bloco 10: Ramo "par" - chama `multiplica(temp, 4)`
@@ -185,7 +185,7 @@ Ambos os caminhos convergem no Bloco 16 para retornar o resultado.
 **Resposta:**
 Sim, o código possui tratamento de erro e retorno precoce na função `divide`:
 
-A função `divide` tem 4 blocos com tratamento de divisão por zero:
+A função `divide` tem 4 blocos básicos com tratamento de divisão por zero:
 
 * Bloco 2: Verifica se `y == 0`
 * Bloco 8: Caso de erro - retorna 0 quando divisor é zero (early return/retorn precoce)
